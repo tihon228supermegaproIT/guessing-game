@@ -1,37 +1,48 @@
-var msg1 = document.getElementById("message1");
-var msg2 = document.getElementById("message2");
-var msg3 = document.getElementById("message3");
+ <script>
+    class GuessingGame {
+      constructor() {
+        this.minRange = null;
+        this.maxRange = null;
+        this.targetNumber = null;
+      }
 
-var answer = Math.floor(Math.random()*100) + 1;
-var no_of_guesses = 0;
-var guessed_nums = [];
+      setRange(min, max) {
+        this.minRange = min;
+        this.maxRange = max;
+        this.targetNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+      }
 
-function play(){
-    var user_guess = document.getElementById("guess").value;
-    if(user_guess < 1 || user_guess > 100){
-        alert("Please enter a number between 1 and 100.");
+      checkGuess(guess) {
+        if (guess < this.targetNumber) {
+          return "Too low!";
+        } else if (guess > this.targetNumber) {
+          return "Too high!";
+        } else {
+          return "Correct! You guessed the number.";
+        }
+      }
     }
-    else{
-        guessed_nums.push(user_guess);
-        no_of_guesses+= 1;
 
-        if(user_guess < answer){
-            msg1.textContent = "Your guess is too low.";
-            msg2.textContent = "No. of guesses: " + no_of_guesses;
-            msg3.textContent = "Guessed numbers are: " +
-            guessed_nums;
-        }
-        else if(user_guess > answer){
-            msg1.textContent = "Your guess is too high.";
-            msg2.textContent = "No. of guesses: " + no_of_guesses;
-            msg3.textContent = "Guessed numbers are: " +
-            guessed_nums;
-        }
-        else if(user_guess == answer){
-            msg1.textContent = "Yippie You Win!!";
-            msg2.textContent = "The number was: " + answer;
-            msg3.textContent = "You guessed it in "+ no_of_guesses + " guesses";
-            document.getElementById("my_btn").disabled = true;
-        }
-    }
-}
+    const game = new GuessingGame();
+
+    const guessInput = document.getElementById("guess");
+    const submitButton = document.getElementById("submit");
+
+    submitButton.addEventListener("click", () => {
+      const guessValue = parseInt(guessInput.value);
+
+      if (isNaN(guessValue)) {
+        alert("Please enter a valid number.");
+      } else {
+        const result = game.checkGuess(guessValue);
+        alert(result);
+      }
+    });
+
+    // Getting the min and max range values from the user
+    const min = parseInt(prompt("Enter the minimum range value:"));
+    const max = parseInt(prompt("Enter the maximum range value:"));
+
+    // Setting the range for the game
+    game.setRange(min, max);
+  </script>
